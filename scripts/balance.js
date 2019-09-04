@@ -10,130 +10,73 @@ $(document).ready(function () {
 
     var layer = new Konva.Layer();
 
-    var gameArea = new Konva.Line({
-        x: 500,
-        y: 100,
-        points: [0, 0, 0, 700, 700, 700, 700, 0],
-        stroke: 'green',
-        strokeWidth: 1,
-        closed: true,
-        globalCompositeOperation: '',
-    });
-
-    var leftLine = new Konva.Line({
-        x: gameArea.x() + 100,
-        y: gameArea.y() + 100,
-        points: [0, 0, 0, 100, 0, 0, 50, 0],
-        stroke: 'red',
-        strokeWidth: 5,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-
-    var rightLine = new Konva.Line({
-        x: gameArea.x() + 150,
-        y: gameArea.y() + 100,
-        points: [0, 0, 50, 0, 50, 0, 50, 100],
-        stroke: 'red',
-        strokeWidth: 5,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-
-    var middleLine = new Konva.Line({
-        x: gameArea.x() + 150,
-        y: gameArea.y() + 75,
-        points: [0, 0, 0, 25, 0, 0, 0, 0],
-        stroke: 'red',
-        strokeWidth: 5,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-
-    var box1 = new Konva.Line({
-        x: gameArea.x() + 60,
-        y: gameArea.y() + 210,
-        points: [0, 0, 0, 75, 75, 75, 75, 0],
-        stroke: 'green',
-        strokeWidth: 5,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-
-    var box2 = new Konva.Line({
-        x: gameArea.x() + 162,
-        y: gameArea.y() + 210,
-        points: [0, 0, 0, 75, 75, 75, 75, 0],
-        stroke: 'green',
-        strokeWidth: 5,
-        lineCap: 'round',
-        lineJoin: 'round'
-    });
-
-    var box1Mouth = new Konva.Ellipse({
-        x: gameArea.x() + 98,
-        y: box1.y(),
-        radiusX: 38,
-        radiusY: 5,
-        stroke: 'green',
-        strokeWidth: 4
-    });
-
-    var box2Mouth = new Konva.Ellipse({
-        x: gameArea.x() + 200,
-        y: box1.y(),
-        radiusX: 38,
-        radiusY: 5,
-        stroke: 'green',
-        strokeWidth: 4
-    });
-
-    var rectShape = new Konva.Line({
-        x: gameArea.x() + 500,
-        y: gameArea.y() + 200,
-        points: [0, 0, 0, 25, 25, 25, 25, 0],
-        stroke: 'black',
-        strokeWidth: 1,
-        fill: '#b53d5a',
-        closed: true,
-        globalCompositeOperation: 'xor',
-        isParent: true,
-    });
-
-    var triangleShape = new Konva.Line({
-        x: gameArea.x() + 550,
-        y: gameArea.y() + 200,
-        points: [0, 0, 0, 25, 25, 25, 25, 25],
-        fill: '#416f85',
-        stroke: 'black',
-        strokeWidth: 1,
-        closed: true,
-        globalCompositeOperation: 'xor',
-        isParent: true,
-    });
-
-    var circleShape = new Konva.Circle({
-        x: gameArea.x() + 600,
-        y: gameArea.y() + 210,
-        radius: 13,
-        fill: '#416f85',
-        stroke: 'black',
-        strokeWidth: 1,
-        globalCompositeOperation: 'xor',
-        isParent: true
-    });
-
-    layer.add(gameArea, leftLine, rightLine, middleLine,
-        box1, box2, box1Mouth, box2Mouth, rectShape, triangleShape, circleShape);
-
-    stage.add(layer);
-
     var selectedShapes = [];
     var rectShapes = [];
     var triangleShapes = [];
     var circleShapes = [];
     var box1ShapeValues = [];
+
     var box2ShapeValue = 15;
+    var totalValue = 0;
+    var leftPlus = 0;
+
+    var firstLeftMaxValue = leftLine.points()[getIndexOfMax(leftLine)];
+    var firstRightMaxValue = rightLine.points()[getIndexOfMax(rightLine)];
+    var rectShape = setRectangle(gameArea);
+    var circleShape = setCircle(gameArea);
+    var triangleShape = setTriangle(gameArea);
+
+    layer.add(gameArea, leftLine, rightLine, middleLine,
+        box1, box2, box1Mouth, box2Mouth, rectShape, circleShape, triangleShape);
+
+    stage.add(layer);
+
+    function setRectangle() {
+        var rectShape = new Konva.Line({
+            x: gameArea.x() + 500,
+            y: gameArea.y() + 200,
+            points: [0, 0, 0, 25, 25, 25, 25, 0],
+            stroke: 'black',
+            strokeWidth: 1,
+            fill: '#b53d5a',
+            closed: true,
+            globalCompositeOperation: 'xor',
+            isParent: true,
+        });
+
+        return rectShape;
+    }
+
+    function setCircle(gameArea) {
+        var circleShape = new Konva.Circle({
+            x: gameArea.x() + 600,
+            y: gameArea.y() + 210,
+            radius: 13,
+            fill: '#416f85',
+            stroke: 'black',
+            strokeWidth: 1,
+            globalCompositeOperation: 'xor',
+            isParent: true
+        });
+
+        return circleShape;
+    }
+
+    function setTriangle(gameArea) {
+        var triangleShape = new Konva.Line({
+            x: gameArea.x() + 550,
+            y: gameArea.y() + 200,
+            points: [0, 0, 0, 25, 25, 25, 25, 25],
+            fill: '#416f85',
+            stroke: 'black',
+            strokeWidth: 1,
+            closed: true,
+            globalCompositeOperation: 'xor',
+            isParent: true,
+        });
+
+        return triangleShape;
+    }
 
     rectShape.on('click', function (e) {
         var selectedShape = e.target;
@@ -221,25 +164,19 @@ $(document).ready(function () {
         }
     });
 
-    var totalValue = 0;
-    var leftPlus = 0;
-    var firstLeftMaxValue = leftLine.points()[getIndexOfMax(leftLine)];
-    var firstRightMaxValue = rightLine.points()[getIndexOfMax(rightLine)];
-
     layer.on('dragend', function (e) {
         var selectedShape = e.target;
         var targetRect = e.target.getClientRect();
 
         if (haveIntersection(box1.getClientRect(), targetRect)) {
             selectedShapes.push(selectedShape);
-
-            selectedShape.fill('green');
+            // selectedShape.fill('green');
             var selectedValue = selectedShape.attrs.value;
 
             box1ShapeValues.push(selectedValue);
 
             totalValue = box1ShapeValues.reduce(function (a, b) {
-                return a + b
+                return a + b;
             }, 0);
 
             leftPlus += selectedValue;
@@ -255,7 +192,7 @@ $(document).ready(function () {
             box2Mouth.y(box2.y());
 
             selectedShapes.forEach(element => {
-                element.y(element.y() + leftPlus);
+                element.y(box1.y() + leftPlus);
             });
 
             layer.draw();
