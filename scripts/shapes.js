@@ -28,7 +28,6 @@ var game1 = {
         { triangleCount: 2, rectCount: 0, circleCount: 1 },
         { triangleCount: 0, rectCount: 0, circleCount: 2 },
         { triangleCount: 1, rectCount: 1, circleCount: 1 },
-        
     ],
     rightChamber: [
         { triangleCount: 1, rectCount: 0, circleCount: 2 },

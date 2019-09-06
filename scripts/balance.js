@@ -59,37 +59,51 @@ $(document).ready(function () {
             for (let j = 0; j < rate; j++) {
                 if (games[i][j].attrs.name == balanceObject.leftChamber) {
                     if (game.leftChamber[i].triangleCount > 0) {
+                        var leftTriangleValue = game.leftChamber[i].triangleCount * game.triangleValue;
                         seatTriangle(game.leftChamber[i].triangleCount, games[i][j].attrs.x + 5, games[i][j].attrs.y + 10);
                         layer.draw();
                     }
+
                     if (game.leftChamber[i].rectCount > 0) {
+                        var leftRectangleValue = game.leftChamber[i].rectCount * game.rectValue;
                         seatRectangle(game.leftChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
                         layer.draw();
                     }
+                    
                     if (game.leftChamber[i].circleCount > 0) {
+                        var leftCircleValue = game.leftChamber[i].circleCount * game.circleValue;
                         seatCircle(game.leftChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
                         layer.draw();
                     }
+
+                    var leftTotalValue = leftTriangleValue + leftRectangleValue + leftCircleValue;
                 }
 
                 if (games[i][j].attrs.name == balanceObject.rightChamber) {
                     if (game.rightChamber[i].triangleCount > 0) {
+                        var rightTriangleValue = game.rightChamber[i].triangleCount * game.triangleValue;
                         seatTriangle(game.rightChamber[i].triangleCount, games[i][j].attrs.x + 10, games[i][j].attrs.y + 10);
                         layer.draw();
                     }
 
                     if (game.rightChamber[i].rectCount > 0) {
+                        var rightRectValue = game.rightChamber[i].rectCount * game.rectValue;
                         seatRectangle(game.rightChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
                         layer.draw();
                     }
 
                     if (game.rightChamber[i].circleCount > 0) {
+                        var rightCircleValue = game.rightChamber[i].circleCount * game.circleValue;
                         seatCircle(game.rightChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
                         layer.draw();
                     }
+
+                    var rightTotalValue = rightTriangleValue + rightRectValue + rightCircleValue;
                 }
             }
         }
+
+        var fark = Math.abs(leftTotalValue - rightTotalValue);
     }
 
     function seatCircle(shapeCount, shapeX, shapeY) {
