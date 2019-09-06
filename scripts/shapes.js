@@ -8,6 +8,36 @@ var gameArea = new Konva.Line({
     globalCompositeOperation: '',
 });
 
+var balanceObject = {
+    leftArm: 'leftLine',
+    rightArm: 'rightLine',
+    middleLine: 'middleLine',
+    leftChamber: 'leftChamber',
+    rightChamber: 'rightChamber',
+    leftMouth: 'leftMouth',
+    rightMouth: 'rightMouth' 
+}
+
+var game1 = {
+    name: 'game1',
+    triangleValue: 5,
+    rectValue: 3,
+    circleValue: 2,
+    leftChamber: [
+        { triangleCount: 1, rectCount: 1, circleCount: 0 },
+        { triangleCount: 2, rectCount: 0, circleCount: 1 },
+        { triangleCount: 0, rectCount: 0, circleCount: 2 },
+        { triangleCount: 1, rectCount: 1, circleCount: 1 },
+        
+    ],
+    rightChamber: [
+        { triangleCount: 1, rectCount: 0, circleCount: 2 },
+        { triangleCount: 1, rectCount: 2, circleCount: 0 },
+        { triangleCount: 1, rectCount: 1, circleCount: 1 },
+        { triangleCount: 0, rectCount: 1, circleCount: 1 },
+    ],
+}
+
 // var leftLine = new Konva.Line({
 //     x: gameArea.x() + 100,
 //     y: gameArea.y() + 100,

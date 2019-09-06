@@ -15,23 +15,151 @@ $(document).ready(function () {
     var triangleShapes = [];
     var circleShapes = [];
     var box1ShapeValues = [];
+    var games = [];
+    var balances = [];
 
-    var box2ShapeValue = 15;
     var totalValue = 0;
     var leftPlus = 0;
+    var game = game1;
+    var rectangleValue = game.rectValue;
+    var triangleValue = game.triangleValue;
+    var circleValue = game.circleValue;
 
     // var firstLeftMaxValue = getIndexOfMaxValue(leftLine);
     // var firstRightMaxValue = getIndexOfMaxValue(rightLine);
-    var rectShape = setRectangle(gameArea);
-    var circleShape = setCircle(gameArea);
-    var triangleShape = setTriangle(gameArea);
+    var rectShape = setRectangle(gameArea, 1050);
+    var circleShape = setCircle(gameArea, 1100);
+    var triangleShape = setTriangle(gameArea, 1125);
 
     layer.add(gameArea, rectShape, circleShape, triangleShape);
     stage.add(layer);
 
-    setGame(7, 225);
+    prepareGame(game);
 
-    function setGame(balanceNumber, alignRate) {
+    function chunk(array, size) {
+        const chunked_arr = [];
+        for (let i = 0; i < array.length; i++) {
+            const last = chunked_arr[chunked_arr.length - 1];
+            if (!last || last.length === size) {
+                chunked_arr.push([array[i]]);
+            } else {
+                last.push(array[i]);
+            }
+        }
+        return chunked_arr;
+    }
+
+    function prepareGame(game) {
+        var balanceCount = game.leftChamber.length;
+        var rate = 7;
+        setBalances(balanceCount, 225);
+        games = chunk(games, rate);
+
+        for (let i = 0; i < games.length; i++) {
+            for (let j = 0; j < rate; j++) {
+                if (games[i][j].attrs.name == balanceObject.leftChamber) {
+                    if (game.leftChamber[i].triangleCount > 0) {
+                        seatTriangle(game.leftChamber[i].triangleCount, games[i][j].attrs.x + 5, games[i][j].attrs.y + 10);
+                        layer.draw();
+                    }
+                    if (game.leftChamber[i].rectCount > 0) {
+                        seatRectangle(game.leftChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
+                        layer.draw();
+                    }
+                    if (game.leftChamber[i].circleCount > 0) {
+                        seatCircle(game.leftChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
+                        layer.draw();
+                    }
+                }
+
+                if (games[i][j].attrs.name == balanceObject.rightChamber) {
+                    if (game.rightChamber[i].triangleCount > 0) {
+                        seatTriangle(game.rightChamber[i].triangleCount, games[i][j].attrs.x + 10, games[i][j].attrs.y + 10);
+                        layer.draw();
+                    }
+
+                    if (game.rightChamber[i].rectCount > 0) {
+                        seatRectangle(game.rightChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
+                        layer.draw();
+                    }
+
+                    if (game.rightChamber[i].circleCount > 0) {
+                        seatCircle(game.rightChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
+                        layer.draw();
+                    }
+                }
+            }
+        }
+    }
+
+    function seatCircle(shapeCount, shapeX, shapeY) {
+        var shapes = [];
+
+        for (let i = 0; i < shapeCount; i++) {
+            var circleShape = new Konva.Circle({
+                x: shapeX,
+                y: shapeY,
+                radius: 13,
+                fill: '#416f85',
+                stroke: 'black',
+                strokeWidth: 1,
+                globalCompositeOperation: 'xor',
+                isParent: true
+            });
+            layer.add(circleShape);
+            stage.add(layer);
+            shapes.push(circleShape);
+        }
+
+        return shapes;
+    }
+
+    function seatRectangle(shapeCount, shapeX, shapeY) {
+        var shapes = [];
+
+        for (let i = 0; i < shapeCount; i++) {
+            var rectShape = new Konva.Line({
+                x: shapeX,
+                y: shapeY,
+                points: [0, 0, 0, 25, 25, 25, 25, 0],
+                stroke: 'black',
+                strokeWidth: 1,
+                fill: '#b53d5a',
+                closed: true,
+                globalCompositeOperation: 'xor',
+            });
+            layer.add(rectShape);
+            stage.add(layer);
+            shapes.push(rectShape);
+        }
+
+        return shapes;
+    }
+
+    function seatTriangle(shapeCount, shapeX, shapeY) {
+        var shapes = [];
+
+        for (let i = 0; i < shapeCount; i++) {
+            var triangleShape = new Konva.Line({
+                x: shapeX,
+                y: shapeY,
+                points: [0, 0, 0, 25, 25, 25, 25, 25],
+                fill: '#416f85',
+                stroke: 'black',
+                strokeWidth: 1,
+                closed: true,
+                globalCompositeOperation: 'xor',
+                isParent: true,
+            });
+            layer.add(triangleShape);
+            stage.add(layer);
+            shapes.push(triangleShape);
+        }
+
+        return shapes;
+    }
+
+    function setBalances(balanceNumber, alignRate) {
         balanceXLeft = 100;
         balanceXRight = 150;
         balanceXMiddle = 150;
@@ -41,108 +169,120 @@ $(document).ready(function () {
         balanceBox2Mouth = 200;
 
         for (let i = 0; i < balanceNumber; i++) {
-            if (i == balanceNumber - 1) {
+            var seatedLeftLine = new Konva.Line({
+                x: gameArea.x() + balanceXLeft,
+                y: gameArea.y() + 100,
+                points: [0, 0, 0, 100, 0, 0, 50, 0],
+                stroke: '#96ce9d',
+                name: 'leftLine',
+                balanceName: 'balance' + (i + 1),
+                strokeWidth: 5,
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
 
-            }
-            else {
-                var seatedLeftLine = new Konva.Line({
-                    x: gameArea.x() + balanceXLeft,
-                    y: gameArea.y() + 100,
-                    points: [0, 0, 0, 100, 0, 0, 50, 0],
-                    stroke: '#96ce9d',
-                    name: 'leftLine',
-                    strokeWidth: 5,
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                });
+            balanceXLeft += alignRate;
 
-                balanceXLeft += alignRate;
+            var seatedRightLine = new Konva.Line({
+                x: gameArea.x() + balanceXRight,
+                y: gameArea.y() + 100,
+                points: [0, 0, 50, 0, 50, 0, 50, 100],
+                stroke: '#96ce9d',
+                strokeWidth: 5,
+                name: 'rightLine',
+                balanceName: 'balance' + (i + 1),
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
 
-                var seatedRightLine = new Konva.Line({
-                    x: gameArea.x() + balanceXRight,
-                    y: gameArea.y() + 100,
-                    points: [0, 0, 50, 0, 50, 0, 50, 100],
-                    stroke: '#96ce9d',
-                    strokeWidth: 5,
-                    name: 'rightLine',
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                });
+            balanceXRight += alignRate;
 
-                balanceXRight += alignRate;
+            var seatedMiddleLine = new Konva.Line({
+                x: gameArea.x() + balanceXMiddle,
+                y: gameArea.y() + 75,
+                points: [0, 0, 0, 25, 0, 0, 0, 0],
+                stroke: '#96ce9d',
+                strokeWidth: 5,
+                name: 'middleLine',
+                balanceName: 'balance' + (i + 1),
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
 
-                var seatedMiddleLine = new Konva.Line({
-                    x: gameArea.x() + balanceXMiddle,
-                    y: gameArea.y() + 75,
-                    points: [0, 0, 0, 25, 0, 0, 0, 0],
-                    stroke: '#96ce9d',
-                    strokeWidth: 5,
-                    name: 'middleLine',
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                });
+            balanceXMiddle += alignRate;
 
-                balanceXMiddle += alignRate;
+            var seatedBox1 = new Konva.Line({
+                x: gameArea.x() + balanceXBox1,
+                y: gameArea.y() + 210,
+                points: [0, 0, 0, 75, 75, 75, 75, 0],
+                stroke: '#e28b40',
+                strokeWidth: 5,
+                name: 'leftChamber',
+                balanceName: 'balance' + (i + 1),
+                lineCap: 'round',
+                lineJoin: 'round',
+            });
 
-                var seatedBox1 = new Konva.Line({
-                    x: gameArea.x() + balanceXBox1,
-                    y: gameArea.y() + 210,
-                    points: [0, 0, 0, 75, 75, 75, 75, 0],
-                    stroke: '#e28b40',
-                    strokeWidth: 5,
-                    name: 'box1',
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                });
+            balanceXBox1 += alignRate;
 
-                balanceXBox1 += alignRate;
+            var seatedBox2 = new Konva.Line({
+                x: gameArea.x() + balanceXBox2,
+                y: gameArea.y() + 210,
+                points: [0, 0, 0, 75, 75, 75, 75, 0],
+                stroke: '#e28b40',
+                strokeWidth: 5,
+                name: 'rightChamber',
+                balanceName: 'balance' + (i + 1),
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
 
-                var seatedBox2 = new Konva.Line({
-                    x: gameArea.x() + balanceXBox2,
-                    y: gameArea.y() + 210,
-                    points: [0, 0, 0, 75, 75, 75, 75, 0],
-                    stroke: '#e28b40',
-                    strokeWidth: 5,
-                    name: 'box2',
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                });
+            balanceXBox2 += alignRate;
 
-                balanceXBox2 += alignRate;
+            var seatedBox1Mouth = new Konva.Ellipse({
+                x: gameArea.x() + balanceBox1Mouth,
+                y: seatedBox1.y(),
+                radiusX: 38,
+                radiusY: 5,
+                name: 'leftMouth',
+                balanceName: 'balance' + (i + 1),
+                stroke: '#e28b40',
+                strokeWidth: 4
+            });
 
-                var seatedBox1Mouth = new Konva.Ellipse({
-                    x: gameArea.x() + balanceBox1Mouth,
-                    y: seatedBox1.y(),
-                    radiusX: 38,
-                    radiusY: 5,
-                    name: 'box1Mouth',
-                    stroke: '#e28b40',
-                    strokeWidth: 4
-                });
+            balanceBox1Mouth += alignRate;
 
-                balanceBox1Mouth += alignRate;
+            var seatedBox2Mouth = new Konva.Ellipse({
+                x: gameArea.x() + balanceBox2Mouth,
+                y: seatedBox1.y(),
+                radiusX: 38,
+                radiusY: 5,
+                name: 'rightMouth',
+                balanceName: 'balance' + (i + 1),
+                stroke: '#e28b40',
+                strokeWidth: 4
+            });
 
-                var seatedBox2Mouth = new Konva.Ellipse({
-                    x: gameArea.x() + balanceBox2Mouth,
-                    y: seatedBox1.y(),
-                    radiusX: 38,
-                    radiusY: 5,
-                    name: 'box2Mouth',
-                    stroke: '#e28b40',
-                    strokeWidth: 4
-                });
+            balanceBox2Mouth += alignRate;
 
-                balanceBox2Mouth += alignRate;
-            }
-
-            layer.add(seatedLeftLine, seatedRightLine, seatedMiddleLine, seatedBox1, seatedBox2, seatedBox1Mouth, seatedBox2Mouth);
+            games.push(seatedLeftLine, seatedRightLine, seatedMiddleLine,
+                seatedBox1, seatedBox2, seatedBox1Mouth, seatedBox2Mouth);
+            games.sort();
+            layer.add(seatedLeftLine, seatedRightLine, seatedMiddleLine,
+                seatedBox1, seatedBox2, seatedBox1Mouth, seatedBox2Mouth);
             stage.add(layer);
         }
+
+        games.forEach(game => {
+            balances.push(game.attrs.balanceName);
+        });
+
+        balances = balances.filter(distinct);
     }
 
-    function setRectangle() {
+    function setRectangle(gameArea, rectX) {
         var rectShape = new Konva.Line({
-            x: gameArea.x() + 1050,
+            x: gameArea.x() + rectX, //1050,
             y: gameArea.y() + 200,
             points: [0, 0, 0, 25, 25, 25, 25, 0],
             stroke: 'black',
@@ -156,9 +296,9 @@ $(document).ready(function () {
         return rectShape;
     }
 
-    function setCircle(gameArea) {
+    function setCircle(gameArea, circleX) {
         var circleShape = new Konva.Circle({
-            x: gameArea.x() + 1100,
+            x: gameArea.x() + circleX, //1100,
             y: gameArea.y() + 210,
             radius: 13,
             fill: '#416f85',
@@ -171,9 +311,9 @@ $(document).ready(function () {
         return circleShape;
     }
 
-    function setTriangle(gameArea) {
+    function setTriangle(gameArea, triangleX) {
         var triangleShape = new Konva.Line({
-            x: gameArea.x() + 1125,
+            x: gameArea.x() + triangleX, //1125,
             y: gameArea.y() + 200,
             points: [0, 0, 0, 25, 25, 25, 25, 25],
             fill: '#416f85',
@@ -200,7 +340,7 @@ $(document).ready(function () {
                 fill: '#b53d5a',
                 closed: true,
                 draggable: true,
-                value: 5,
+                value: rectangleValue,
             });
 
             shape.stroke('green');
@@ -229,7 +369,7 @@ $(document).ready(function () {
                 strokeWidth: 1,
                 closed: true,
                 draggable: true,
-                value: 2
+                value: triangleValue
             });
 
             shape.stroke('green');
@@ -257,7 +397,7 @@ $(document).ready(function () {
                 stroke: 'black',
                 strokeWidth: 1,
                 draggable: true,
-                value: 3,
+                value: circleValue,
             });
 
             shape.stroke('green');
@@ -335,5 +475,9 @@ $(document).ready(function () {
             r2.y > r1.y + r1.height ||
             r2.y + r2.height < r1.y
         );
+    }
+
+    function distinct(value, index, self) {
+        return self.indexOf(value) === index;
     }
 });
