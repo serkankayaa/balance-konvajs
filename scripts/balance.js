@@ -148,7 +148,7 @@ $(document).ready(function () {
                     strokeWidth: 1,
                     fill: '#b53d5a',
                     closed: true,
-                    globalCompositeOperation: 'xor',
+                    // globalCompositeOperation: 'xor',
                 });
 
                 shapeLimit += 18;
@@ -165,7 +165,7 @@ $(document).ready(function () {
                     globalCompositeOperation: 'xor',
                 });
             }
-            
+
             layer.add(rectShape);
             stage.add(layer);
             shapes.push(rectShape);
