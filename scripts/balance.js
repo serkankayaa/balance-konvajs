@@ -107,7 +107,6 @@ $(document).ready(function () {
                     fill: '#416f85',
                     stroke: 'black',
                     strokeWidth: 1,
-                    globalCompositeOperation: 'xor',
                     isParent: true
                 });
 
@@ -121,7 +120,6 @@ $(document).ready(function () {
                     fill: '#416f85',
                     stroke: 'black',
                     strokeWidth: 1,
-                    globalCompositeOperation: 'xor',
                     isParent: true
                 });
             }
@@ -148,7 +146,6 @@ $(document).ready(function () {
                     strokeWidth: 1,
                     fill: '#b53d5a',
                     closed: true,
-                    // globalCompositeOperation: 'xor',
                 });
 
                 shapeLimit += 18;
@@ -162,7 +159,6 @@ $(document).ready(function () {
                     strokeWidth: 1,
                     fill: '#b53d5a',
                     closed: true,
-                    globalCompositeOperation: 'xor',
                 });
             }
 
@@ -188,7 +184,6 @@ $(document).ready(function () {
                     stroke: 'black',
                     strokeWidth: 1,
                     closed: true,
-                    globalCompositeOperation: 'xor',
                     isParent: true,
                 });
 
@@ -203,7 +198,6 @@ $(document).ready(function () {
                     stroke: 'black',
                     strokeWidth: 1,
                     closed: true,
-                    globalCompositeOperation: 'xor',
                     isParent: true,
                 });
             }
