@@ -59,67 +59,73 @@ $(document).ready(function () {
             for (let j = 0; j < rate; j++) {
                 if (games[i][j].attrs.name == balanceObject.leftChamber) {
                     if (game.leftChamber[i].triangleCount > 0) {
-                        var leftTriangleValue = game.leftChamber[i].triangleCount * game.triangleValue;
-                        seatTriangle(game.leftChamber[i].triangleCount, games[i][j].attrs.x + 5, games[i][j].attrs.y + 10);
+                        seatTriangle(game.leftChamber[i].triangleCount, games[i][j].attrs.x + 5, games[i][j].attrs.y + 50);
                         layer.draw();
                     }
 
                     if (game.leftChamber[i].rectCount > 0) {
-                        var leftRectangleValue = game.leftChamber[i].rectCount * game.rectValue;
-                        seatRectangle(game.leftChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
-                        layer.draw();
-                    }
-                    
-                    if (game.leftChamber[i].circleCount > 0) {
-                        var leftCircleValue = game.leftChamber[i].circleCount * game.circleValue;
-                        seatCircle(game.leftChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
+                        seatRectangle(game.leftChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 50);
                         layer.draw();
                     }
 
-                    var leftTotalValue = leftTriangleValue + leftRectangleValue + leftCircleValue;
+                    if (game.leftChamber[i].circleCount > 0) {
+                        seatCircle(game.leftChamber[i].circleCount, games[i][j].attrs.x + 61, games[i][j].attrs.y + 60);
+                        layer.draw();
+                    }
                 }
 
                 if (games[i][j].attrs.name == balanceObject.rightChamber) {
                     if (game.rightChamber[i].triangleCount > 0) {
-                        var rightTriangleValue = game.rightChamber[i].triangleCount * game.triangleValue;
-                        seatTriangle(game.rightChamber[i].triangleCount, games[i][j].attrs.x + 10, games[i][j].attrs.y + 10);
+                        seatTriangle(game.rightChamber[i].triangleCount, games[i][j].attrs.x + 5, games[i][j].attrs.y + 50);
                         layer.draw();
                     }
 
                     if (game.rightChamber[i].rectCount > 0) {
-                        var rightRectValue = game.rightChamber[i].rectCount * game.rectValue;
-                        seatRectangle(game.rightChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 30);
+                        seatRectangle(game.rightChamber[i].rectCount, games[i][j].attrs.x + 30, games[i][j].attrs.y + 50);
                         layer.draw();
                     }
 
                     if (game.rightChamber[i].circleCount > 0) {
-                        var rightCircleValue = game.rightChamber[i].circleCount * game.circleValue;
-                        seatCircle(game.rightChamber[i].circleCount, games[i][j].attrs.x + 50, games[i][j].attrs.y + 25);
+                        seatCircle(game.rightChamber[i].circleCount, games[i][j].attrs.x + 61, games[i][j].attrs.y + 60);
                         layer.draw();
                     }
-
-                    var rightTotalValue = rightTriangleValue + rightRectValue + rightCircleValue;
                 }
             }
         }
-
-        var fark = Math.abs(leftTotalValue - rightTotalValue);
-    }
+    };
 
     function seatCircle(shapeCount, shapeX, shapeY) {
         var shapes = [];
+        var shapeLimit = 0;
 
         for (let i = 0; i < shapeCount; i++) {
-            var circleShape = new Konva.Circle({
-                x: shapeX,
-                y: shapeY,
-                radius: 13,
-                fill: '#416f85',
-                stroke: 'black',
-                strokeWidth: 1,
-                globalCompositeOperation: 'xor',
-                isParent: true
-            });
+            if (shapeCount > 1) {
+                var circleShape = new Konva.Circle({
+                    x: shapeX,
+                    y: shapeY - shapeLimit,
+                    radius: 10,
+                    fill: '#416f85',
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    globalCompositeOperation: 'xor',
+                    isParent: true
+                });
+
+                shapeLimit += 21;
+            }
+            else if (shapeCount == 1) {
+                var circleShape = new Konva.Circle({
+                    x: shapeX,
+                    y: shapeY,
+                    radius: 10,
+                    fill: '#416f85',
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    globalCompositeOperation: 'xor',
+                    isParent: true
+                });
+            }
+
             layer.add(circleShape);
             stage.add(layer);
             shapes.push(circleShape);
@@ -130,18 +136,36 @@ $(document).ready(function () {
 
     function seatRectangle(shapeCount, shapeX, shapeY) {
         var shapes = [];
+        var shapeLimit = 0;
 
         for (let i = 0; i < shapeCount; i++) {
-            var rectShape = new Konva.Line({
-                x: shapeX,
-                y: shapeY,
-                points: [0, 0, 0, 25, 25, 25, 25, 0],
-                stroke: 'black',
-                strokeWidth: 1,
-                fill: '#b53d5a',
-                closed: true,
-                globalCompositeOperation: 'xor',
-            });
+            if (shapeCount > 1) {
+                var rectShape = new Konva.Line({
+                    x: shapeX,
+                    y: shapeY - shapeLimit,
+                    points: [0, 0, 0, 18, 18, 18, 18, 0],
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    fill: '#b53d5a',
+                    closed: true,
+                    globalCompositeOperation: 'xor',
+                });
+
+                shapeLimit += 18;
+            }
+            else if (shapeCount == 1) {
+                var rectShape = new Konva.Line({
+                    x: shapeX,
+                    y: shapeY,
+                    points: [0, 0, 0, 18, 18, 18, 18, 0],
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    fill: '#b53d5a',
+                    closed: true,
+                    globalCompositeOperation: 'xor',
+                });
+            }
+            
             layer.add(rectShape);
             stage.add(layer);
             shapes.push(rectShape);
@@ -152,19 +176,38 @@ $(document).ready(function () {
 
     function seatTriangle(shapeCount, shapeX, shapeY) {
         var shapes = [];
+        var shapeLimit = 0;
 
         for (let i = 0; i < shapeCount; i++) {
-            var triangleShape = new Konva.Line({
-                x: shapeX,
-                y: shapeY,
-                points: [0, 0, 0, 25, 25, 25, 25, 25],
-                fill: '#416f85',
-                stroke: 'black',
-                strokeWidth: 1,
-                closed: true,
-                globalCompositeOperation: 'xor',
-                isParent: true,
-            });
+            if (shapeCount > 1) {
+                var triangleShape = new Konva.Line({
+                    x: shapeX,
+                    y: shapeY - shapeLimit,
+                    points: [0, 0, 0, 18, 18, 18, 18, 18],
+                    fill: '#416f85',
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    closed: true,
+                    globalCompositeOperation: 'xor',
+                    isParent: true,
+                });
+
+                shapeLimit += 18;
+            }
+            else if (shapeCount == 1) {
+                var triangleShape = new Konva.Line({
+                    x: shapeX,
+                    y: shapeY,
+                    points: [0, 0, 0, 18, 18, 18, 18, 18],
+                    fill: '#416f85',
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    closed: true,
+                    globalCompositeOperation: 'xor',
+                    isParent: true,
+                });
+            }
+
             layer.add(triangleShape);
             stage.add(layer);
             shapes.push(triangleShape);
